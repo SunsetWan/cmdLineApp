@@ -9,12 +9,10 @@
 import Foundation
 
 
-func write(To url: NSURL = NSURL(fileURLWithPath: "/Users/sunsetwan/JSONWrapper.swift"), contentsOf contents: String) {
+func write(To url: NSURL, contentsOf contents: String) {
     
     // Create file
     FileManager.default.createFile(atPath: url.absoluteString!, contents: nil, attributes: nil)
-    
-    
     
     // write
     do {
@@ -22,10 +20,6 @@ func write(To url: NSURL = NSURL(fileURLWithPath: "/Users/sunsetwan/JSONWrapper.
     } catch {
         print("Unexpected error: \(error).")
     }
-        
-    
-
-
 }
 
 

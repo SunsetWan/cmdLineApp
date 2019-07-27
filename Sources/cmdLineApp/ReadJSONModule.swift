@@ -9,7 +9,6 @@
 import Foundation
 import SwiftyJSON
 
-
 extension String {
     var fittingCamelConvention: String {
         return components(separatedBy: "_").enumerated().map({ $0 == 0 ? $1 : $1.capitalized }).joined()
@@ -29,18 +28,17 @@ var records = [MetaData]()
 func readJSONFile(From path: NSURL, structName name: String) -> String {
     
     let header = """
-import SwiftyJSON
-
-struct \(name): JSONWrapperModel {
-
-\tlet json: JSON
-
-\tinit(json: JSON) {
-\t\tself.json = json
-\t}\n
-
-"""
+    import SwiftyJSON
     
+    struct \(name): JSONWrapperModel {
+    
+    \tlet json: JSON
+    
+    \tinit(json: JSON) {
+    \t\tself.json = json
+    \t}\n
+    
+    """
     
     var stringKing = ""
     stringKing.append(header)
@@ -50,18 +48,13 @@ struct \(name): JSONWrapperModel {
     var valueOfindexName = [Any]()
     
     
-    
-    
     do {
-       jsonString = try String(contentsOf: path as URL, encoding: .utf8)
-//        print(jsonString)
+        jsonString = try String(contentsOf: path as URL, encoding: .utf8)
     } catch {
         print("Unexpected error: \(error).")
     }
     
     json = JSON(parseJSON: jsonString)
-    
-
     
     for (name, value): (String, Any) in json.dictionaryObject! {
         
@@ -69,21 +62,12 @@ struct \(name): JSONWrapperModel {
         temp.key = name
         temp.value = value
         
-    
-        
         if json[name].string != nil {
-            
-//            print(name)
-            
             if name.hasSuffix("url") {
-                 temp.type = "URL"
+                temp.type = "URL"
             } else {
-                 temp.type = "string"
+                temp.type = "string"
             }
-            
-//            temp.type = json[name].string!.hasSuffix("url") ? "URL" : "string"
-
-            
         } else if json[name].int != nil {
             temp.type = "int"
         } else if json[name].bool != nil {
@@ -97,21 +81,12 @@ struct \(name): JSONWrapperModel {
             } else {
                 temp.type = "<#placeHolder#>"
             }
-            
-//            temp.type = "<#placeHolder#>"
         }
-        
         records.append(temp)
-        
-//        print(name)
-//        print(value)
-//        print("---------")
     }
     
-   
+    
     for index in records {
-//        print("Key: \(index.key!)\nValue: \(index.value!)\nType: \(index.type!)\n")
-        
         var isURL: Bool {
             if index.type! == "URL" {
                 return true
@@ -121,29 +96,13 @@ struct \(name): JSONWrapperModel {
         }
         
         let tempString = """
-    var \(index.key!.fittingCamelConvention): \(isURL ? "URL" : index.type!.capitalized)? {
+        var \(index.key!.fittingCamelConvention): \(isURL ? "URL" : index.type!.capitalized)? {
         return json["\(index.key!)"].\(isURL ? "url": index.type!)
-    }\n\n
-"""
+        }\n\n
+        """
         stringKing.append(tempString)
-//        print(tempString)
-        
     }
     
     stringKing.append("}")
-//    print(stringKing)
-    
     return stringKing
-    
-    
-//   write(contentsOf: stringKing)
-    
-    
-    
-
-
-
-    
-    
-    
 }
