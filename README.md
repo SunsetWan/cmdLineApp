@@ -1,6 +1,13 @@
 # cmdLineApp
 
- Usage: ./cmdLineApp --help
+1. run `cd ./cmdLineApp`
+2. run `swift build`
+3. run `swift run cmdLineApp`
+-------
+
+
+Options: 
+    `./cmdLineApp --help`
 
  Arguments:
 
